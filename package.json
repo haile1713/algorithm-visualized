@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview", 
+    "preview": "vite preview",
     "test": "vitest"
   },
   "devDependencies": {
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "p5": "^1.9.4",
+    "tone": "^15.0.4",
     "vitest": "^2.0.3"
   }
 }

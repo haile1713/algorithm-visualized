@@ -5,7 +5,7 @@ export class BubbleSort {
       yield { arr, index: -1, swaped: false }
     let swaped = false
     let counter = 0
-    let i = 0
+    let i = 1
 
     while (!swaped) {
       swaped = true
