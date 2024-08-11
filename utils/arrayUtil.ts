@@ -2,28 +2,34 @@ import p5 from "p5"
 import { SoundUtil } from "./soundUtil"
 const sound = new SoundUtil()
 
-export const drawArray = (p: p5, arr: number[], swapIndex: number, swaped = false, letters: string[] | null = null) => {
+type param = {
+  p: p5
+  arr: number[]
+  swapIndex: number
+  swaped: boolean
+  letters: string[] | null
+  sound: SoundUtil
+}
+
+export const drawArray = ({ p, arr, swapIndex, swaped, letters, sound }: param) => {
   if (!swaped && swapIndex != -1) {
-    sound.playNote("C4")
+    sound.playNote(293.66)
   }
   else if (swaped && swapIndex != -1) {
-    sound.playNote("F4")
-  }
-  else if (swapIndex == 0) {
-    sound.playNote("F4")
+    sound.playNote(440)
   }
   for (let i = 0; i < arr.length; i++) {
     const xWidth = (p.width / (arr.length + 1))
     const muliplier = 500 / Math.max(...arr)
-    const yHeght = arr[i] * muliplier
-    if (swapIndex == i)
+    const yHeght = arr[i] * muliplier + 1
+    if (i == swapIndex)
       p.fill("red")
     if (i == swapIndex + 1)
       p.fill("blue")
     p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght)
     p.fill(100)
     p.rect(i * xWidth + xWidth / 2, 0, 2, p.height - yHeght)
-    const text: string = letters ? letters[i] : `${arr[i]}`
+    const text: string = letters ? letters[arr[i]] : `${arr[i]}`
     const fontSize = 1000 / (arr.length * text.length)
 
     p.textSize(fontSize)
