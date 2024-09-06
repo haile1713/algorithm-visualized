@@ -1,6 +1,5 @@
 import p5 from "p5"
 import { SoundUtil } from "./soundUtil"
-const sound = new SoundUtil()
 
 type param = {
   p: p5
@@ -10,14 +9,18 @@ type param = {
   letters: string[] | null
   sound: SoundUtil
 }
+const Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 export const drawArray = ({ p, arr, swapIndex, swaped, letters, sound }: param) => {
   if (!swaped && swapIndex != -1) {
-    sound.playNote(293.66)
+    // const note = `${Notes[swapIndex % Notes.length]}3`
+    sound.playNote("C5")
   }
   else if (swaped && swapIndex != -1) {
-    sound.playNote(440)
+    const note = `${Notes[swapIndex % Notes.length]}4`
+    sound.playNote(note)
   }
+
   for (let i = 0; i < arr.length; i++) {
     const xWidth = (p.width / (arr.length + 1))
     const muliplier = 500 / Math.max(...arr)

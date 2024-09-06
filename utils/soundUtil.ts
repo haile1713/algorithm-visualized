@@ -1,48 +1,46 @@
-
+import * as TONE from "tone"
 export class SoundUtil {
-  isMutted = false
-  action: HTMLAudioElement
-  ding: HTMLAudioElement
-  players: AudioContext[]
+  isMutted = true
   index = 0
+  music: TONE.Player
   constructor() {
-    this.action = new Audio('../public/asset/se_game_attack1.wav')
-    this.ding = new Audio('../public/asset/se_game_fixa.wav')
-    this.players = new Array(5).fill(0).map(x => new (window.AudioContext || window.webkitAudioContext)())
+    this.music = new TONE.Player("/Algorithms-visualized/asset/Tsehay_demekech.mp3").toDestination()
   }
-
-  playNote(freq: number) {
+  playNote(note: string) {
     if (!this.isMutted) {
-      // Create a new AudioContext
-      const duration = 0.1; // Duration in
-      const player = this.players[this.index]
-
-      const oscillator = player.createOscillator();
-      oscillator.frequency.setValueAtTime(freq, player.currentTime);
-      oscillator.type = 'sine';
-
-      // Create a GainNode to control the volume
-      // const volumeControl = player.createGain();
-      // volumeControl.gain.setValueAtTime(0.1, player.currentTime);
-      //
-      // oscillator.connect(volumeControl);
-
-      oscillator.connect(player.destination);
-      oscillator.start();
-
-      oscillator.stop(player.currentTime + duration);
-      this.index += 1
-      if (this.index == this.players.length)
-        this.index = 0
+      const env = new TONE.AmplitudeEnvelope({
+        attack: 0.1,
+        decay: 0.2,
+        sustain: 0.3,
+        release: 0.5,
+      }).toDestination();
+      const osc = new TONE.Oscillator().connect(env).start();
+      osc.frequency.value = note;
+      // osc.volume.value = -10
+      const filter = new TONE.Filter(300, "highpass").toDestination();
+      env.connect(filter)
+      env.triggerAttackRelease("+0.1", 0.1);
     }
   }
+  homeTheme() {
+    // if (!this.isMutted) {
+    TONE.loaded().then(() => {
+      this.music.start()
+      const filter = new TONE.Filter(300, "lowpass").toDestination();
+      this.music.connect(filter)
+      this.music.volume.value = -20
+      this.music.loop = true
+    })
+    // }
+  }
   mute() {
-    // this.players.forEach(player => player.close())
     this.isMutted = true
+    this.music.mute = true
   }
   unmute() {
-    // this.players = new Array(5).fill(0).map(x => new (window.AudioContext || window.webkitAudioContext))
+    TONE.start()
     this.isMutted = false
+    this.music.mute = false
   }
 
 
