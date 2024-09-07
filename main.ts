@@ -15,10 +15,10 @@ const sketch = (p: p5) => {
   let nextIteration: IteratorResult<{ arr: number[], index: number, swaped: boolean }>
   let lastValue: number[]
   let isMutted = true
+
   const select = p.select("#select")
-  if (!select) return
   const slider = p.select("#slider")
-  if (!slider) return
+  if (!slider || !select) return
 
   const sortingAlgorithm = p.createSelect(select)
 
@@ -28,63 +28,49 @@ const sketch = (p: p5) => {
 
 
     const restart = p.select("#restart")
-    if (!restart) return
+    const mute = p.select("#mute")
+    const muteCheckbox = p.select("#muteCheckbox")
+    if (!restart || !mute || !muteCheckbox) return // if any ui has not been found return
+
+    // defalut values
+    muteCheckbox.checked(false)
+    slider.value(3)
+    p.frameRate(+slider.value())
+
+    sound.homeTheme()
 
     restart.mousePressed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
-    const mute = p.select("#mute")
-    const muteCheckbox = p.select("#muteCheckbox")
-    if (!mute || !muteCheckbox) return
-
-    // defalut values
-    muteCheckbox.checked(false)
-    slider.value(3)
 
     mute.mousePressed(() => {
       isMutted = !isMutted
-      if (isMutted) {
-        sound.mute()
-      }
-      else {
-        sound.unmute()
-      }
+      isMutted ? sound.mute() : sound.unmute()
     })
-    bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
-    iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
+
+    bubbleSort = Sort.SortWith(sortingAlgorithm.selected()) // retunrs sorting algorithm class
+    const letters_num = createArrayForLetters(letters.Amharic) // create array of numbers from the letters
+
+    iterator = bubbleSort.sort(letters_num) // sorts and returns iterator
     nextIteration = iterator.next()
+
     drawArray({ p, arr: nextIteration.value.arr, swapIndex: nextIteration.value.index, swaped: false, letters: letters.Amharic, sound }) // draw num as a bar hieght
-    // sound.homeTheme()
-    p.frameRate(+slider.value())
-    console.log(+slider.value())
+
     slider.changed(() => {
-      console.log(+slider.value())
-      p.frameRate(+slider.value())
+      p.frameRate(+slider.value()) // the plus symbol is to convert string to number
     })
   }
   p.draw = () => {
-    // p.frameRate(slider.value())
+    p.clear() // clear canvas
+
     sortingAlgorithm.changed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
-    sound.isMutted = isMutted
-    p.clear()
-    if (!nextIteration.done) {
-      drawArray({
-        p,
-        arr: nextIteration.value.arr,
-        swapIndex: nextIteration.value.index,
-        swaped: nextIteration.value.swaped,
-        letters: letters.Amharic,
-        sound
-      })
-      lastValue = nextIteration.value.arr
-      nextIteration = iterator.next()
-    } else {
+    if (nextIteration.done) { // if it finished drawing
       drawArray({
         p,
         arr: lastValue,
@@ -93,11 +79,22 @@ const sketch = (p: p5) => {
         letters: letters.Amharic,
         sound
       })
+      return
     }
-
+    drawArray({
+      p,
+      arr: nextIteration.value.arr,
+      swapIndex: nextIteration.value.index,
+      swaped: nextIteration.value.swaped,
+      letters: letters.Amharic,
+      sound
+    })
+    lastValue = nextIteration.value.arr
+    nextIteration = iterator.next()
   }
   p.windowResized = () => {
-    p.resizeCanvas(app.clientWidth, app.clientHeight)
+    const prevMuteState = sound.isMutted
+    sound.mute()
     if (nextIteration) {
       if (!nextIteration.done) {
         p.background(0)
@@ -111,6 +108,9 @@ const sketch = (p: p5) => {
         })
       }
     }
+    p.resizeCanvas(app.clientWidth, app.clientHeight)
+    if (!prevMuteState) // if previouly has sound
+      sound.unmute()
   }
 }
 

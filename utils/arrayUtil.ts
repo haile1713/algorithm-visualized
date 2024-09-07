@@ -13,7 +13,6 @@ const Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 export const drawArray = ({ p, arr, swapIndex, swaped, letters, sound }: param) => {
   if (!swaped && swapIndex != -1) {
-    // const note = `${Notes[swapIndex % Notes.length]}3`
     sound.playNote("C5")
   }
   else if (swaped && swapIndex != -1) {

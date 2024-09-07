@@ -9,22 +9,22 @@ export class SoundUtil {
     this.music = new TONE.Player("/Algorithms-visualized/asset/Tsehay_demekech.mp3").toDestination()
     this.envelops = Array.from({ length: 10 }, () => {
       const env = new TONE.AmplitudeEnvelope({
-        attack: 0.1,
-        decay: 0.2,
-        sustain: 0.3,
-        release: 0.5,
+        attack: 0.05,
+        decay: 0.1,
+        sustain: 0.2,
+        release: 0.3,
       }).toDestination()
-      const filter = new TONE.Filter(300, "highpass").toDestination();
-      env.connect(filter)
       return env
     })
   }
   playNote(note: string) {
     if (!this.isMutted) {
       const env = this.envelops[this.counter % 10]
-      const osc = new TONE.Oscillator().connect(env).start().stop("+0.1");
+      const osc = new TONE.Oscillator().connect(env).start();
       osc.frequency.value = note;
       env.triggerAttackRelease("+0.1", 0.1);
+      osc.stop("+0.5")
+      osc.volume.value = -10
 
       this.counter++
     }
