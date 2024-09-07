@@ -3,10 +3,12 @@ import { BubbleSort } from "../algorithms/bubbleSort";
 
 const iteratorToArr = (iterator: Iterator<{ arr: number[], index: number }>) => {
   let result = iterator.next()
-  while (!iterator.next().done) {
+  let finalArr: number[] = result.value.arr
+  while (!result.done) {
+    finalArr = result.value.arr;
     result = iterator.next()
   }
-  return result.value.arr // return the last value(sorted arr)
+  return finalArr
 }
 describe("BubbleSort", () => {
 

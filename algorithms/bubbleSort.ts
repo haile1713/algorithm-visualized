@@ -2,9 +2,8 @@ export class BubbleSort {
 
   *sort(arr: number[]): Iterator<{ arr: number[], index: number, swaped: boolean }> {
     if (arr.length < 2)// already sorted case
-      yield { arr, index: -1, swaped: false }
+      return { arr, index: -1, swaped: false }
     let swaped = true
-    let counter = 0
     let i = 1
 
     while (swaped) {
@@ -16,12 +15,13 @@ export class BubbleSort {
         }
         else {
           yield { arr, index: j, swaped: false }
+          continue
         }
         yield { arr, index: j, swaped }
-        counter++
       }
-      i++
+      i += 1
     }
+    yield { arr: [...arr], index: -1, swaped: false };
   }
 
   swap(arr: number[], i: number, j: number) {

@@ -18,7 +18,8 @@ const sketch = (p: p5) => {
 
   const select = p.select("#select")
   const slider = p.select("#slider")
-  if (!slider || !select) return
+  const slider_label = p.select("#slider-label")
+  if (!slider || !select || !slider_label) return
 
   const sortingAlgorithm = p.createSelect(select)
 
@@ -35,9 +36,10 @@ const sketch = (p: p5) => {
     // defalut values
     muteCheckbox.checked(false)
     slider.value(3)
+    slider_label.html("Speed: " + slider.value())
     p.frameRate(+slider.value())
 
-    sound.homeTheme()
+    // sound.homeTheme()
 
     restart.mousePressed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
@@ -60,6 +62,9 @@ const sketch = (p: p5) => {
 
     slider.changed(() => {
       p.frameRate(+slider.value()) // the plus symbol is to convert string to number
+      slider_label.html("Speed: " + slider.value())
+      if (slider.value() == 0)
+        slider_label.html("Speed = 0, paused")
     })
   }
   p.draw = () => {
@@ -93,21 +98,22 @@ const sketch = (p: p5) => {
     nextIteration = iterator.next()
   }
   p.windowResized = () => {
+    if (!nextIteration || nextIteration.done) { // if it finished drawing resize canvas then quit
+      p.resizeCanvas(app.clientWidth, app.clientHeight)
+      return
+    }
+
     const prevMuteState = sound.isMutted
     sound.mute()
-    if (nextIteration) {
-      if (!nextIteration.done) {
-        p.background(0)
-        drawArray({
-          p,
-          arr: nextIteration.value.arr,
-          swapIndex: nextIteration.value.index,
-          swaped: nextIteration.value.swaped,
-          letters: letters.Amharic,
-          sound
-        })
-      }
-    }
+    p.background(0)
+    drawArray({
+      p,
+      arr: nextIteration.value.arr,
+      swapIndex: nextIteration.value.index,
+      swaped: nextIteration.value.swaped,
+      letters: letters.Amharic,
+      sound
+    })
     p.resizeCanvas(app.clientWidth, app.clientHeight)
     if (!prevMuteState) // if previouly has sound
       sound.unmute()
