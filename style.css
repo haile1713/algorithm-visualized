@@ -7,7 +7,8 @@ body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  background: #332200;
+  /* background: #332200; */
+  background: #000;
 }
 
 #app {
@@ -23,11 +24,19 @@ body {
   top: 0;
 }
 
-.choose {
+.left {
   z-index: 10000;
   position: absolute;
   top: 0;
   right: 0;
+
+}
+
+.choose {
+  z-index: 10000;
+  /* position: absolute; */
+  /* top: 0; */
+  /* right: 0; */
 }
 
 .slider {

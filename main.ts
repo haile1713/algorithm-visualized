@@ -17,6 +17,8 @@ const sketch = (p: p5) => {
   let isMutted = true
   const select = p.select("#select")
   if (!select) return
+  const slider = p.select("#slider")
+  if (!slider) return
 
   const sortingAlgorithm = p.createSelect(select)
 
@@ -34,7 +36,12 @@ const sketch = (p: p5) => {
       nextIteration = iterator.next()
     })
     const mute = p.select("#mute")
-    if (!mute) return
+    const muteCheckbox = p.select("#muteCheckbox")
+    if (!mute || !muteCheckbox) return
+
+    // defalut values
+    muteCheckbox.checked(false)
+    slider.value(3)
 
     mute.mousePressed(() => {
       isMutted = !isMutted
@@ -49,10 +56,16 @@ const sketch = (p: p5) => {
     iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
     nextIteration = iterator.next()
     drawArray({ p, arr: nextIteration.value.arr, swapIndex: nextIteration.value.index, swaped: false, letters: letters.Amharic, sound }) // draw num as a bar hieght
-    p.frameRate(5)
-    sound.homeTheme()
+    // sound.homeTheme()
+    p.frameRate(+slider.value())
+    console.log(+slider.value())
+    slider.changed(() => {
+      console.log(+slider.value())
+      p.frameRate(+slider.value())
+    })
   }
   p.draw = () => {
+    // p.frameRate(slider.value())
     sortingAlgorithm.changed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters

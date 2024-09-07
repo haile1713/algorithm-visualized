@@ -3,23 +3,30 @@ export class SoundUtil {
   isMutted = true
   index = 0
   music: TONE.Player
+  envelops: Array<TONE.AmplitudeEnvelope>
+  counter = 0
   constructor() {
     this.music = new TONE.Player("/Algorithms-visualized/asset/Tsehay_demekech.mp3").toDestination()
-  }
-  playNote(note: string) {
-    if (!this.isMutted) {
+    this.envelops = Array.from({ length: 10 }, () => {
       const env = new TONE.AmplitudeEnvelope({
         attack: 0.1,
         decay: 0.2,
         sustain: 0.3,
         release: 0.5,
-      }).toDestination();
-      const osc = new TONE.Oscillator().connect(env).start();
-      osc.frequency.value = note;
-      // osc.volume.value = -10
+      }).toDestination()
       const filter = new TONE.Filter(300, "highpass").toDestination();
       env.connect(filter)
+      return env
+    })
+  }
+  playNote(note: string) {
+    if (!this.isMutted) {
+      const env = this.envelops[this.counter % 10]
+      const osc = new TONE.Oscillator().connect(env).start().stop("+0.1");
+      osc.frequency.value = note;
       env.triggerAttackRelease("+0.1", 0.1);
+
+      this.counter++
     }
   }
   homeTheme() {

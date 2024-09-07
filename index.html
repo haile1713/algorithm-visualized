@@ -15,7 +15,7 @@
     <div>
       <label id="mute" class="swap swap-flip ">
         <!-- this hidden checkbox controls the state -->
-        <input type="checkbox" value="false" id="muteCheckbox" />
+        <input type="checkbox" checked=true id="muteCheckbox" />
         <!-- mute icon -->
         <div class="swap-off btns-click">
           Muted
@@ -44,7 +44,24 @@
 
   </div>
 
-  <div class="flex flex-col">
+  <div class="left mr-5">
+    <div class="slider mt-5">
+      <label for="slider" class="text-cyan-500">Speed</label>
+      <input id="slider" type="range" min="0" max="10" value="4" class="range" step="1" />
+      <div class="flex w-full justify-between px-2 text-xs">
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+        <span>|</span>
+      </div>
+    </div>
     <select id="select" class="select select-accent w-full max-w-xs choose select-sm bg-accent text-black mx-2 my-5">
       <option selected>Bubble Sort</option>
       <option>Insertion Sort</option>
@@ -53,16 +70,6 @@
       <option>Quick Sort</option>
       <option>Heap Sort</option>
     </select>
-    <div class="slider">
-      <input type="range" min="0" max="100" value="25" class="range" step="25" />
-      <div class="flex w-full justify-between px-2 text-xs">
-        <span>|</span>
-        <span>|</span>
-        <span>|</span>
-        <span>|</span>
-        <span>|</span>
-      </div>
-    </div>
   </div>
 
   <script type="module" src="./main.ts"></script>
