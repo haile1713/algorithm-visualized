@@ -6,12 +6,13 @@ type param = {
   arr: number[]
   swapIndex: number
   swaped: boolean
-  letters: string[] | null
+  json: { style: { color: string, bg_color: string }, letters: string[] } | null
   sound: SoundUtil
+  font: p5.Font
 }
 const Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
-export const drawArray = ({ p, arr, swapIndex, swaped, letters, sound }: param) => {
+export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: param) => {
   if (!swaped && swapIndex != -1) {
     sound.playNote("C5")
   }
@@ -23,19 +24,20 @@ export const drawArray = ({ p, arr, swapIndex, swaped, letters, sound }: param) 
   for (let i = 0; i < arr.length; i++) {
     const xWidth = (p.width / (arr.length + 1))
     const muliplier = 500 / Math.max(...arr)
-    const yHeght = arr[i] * muliplier + 1
+    const yHeght = (arr[i] + 1) * muliplier
     if (i == swapIndex)
       p.fill("red")
     if (i == swapIndex + 1)
       p.fill("blue")
-    p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght)
-    p.fill(100)
-    p.rect(i * xWidth + xWidth / 2, 0, 2, p.height - yHeght)
-    const text: string = letters ? letters[arr[i]] : `${arr[i]}`
+    p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght) // bar representing the array
+    p.fill(json?.style.bg_color || "#444")
+    p.rect(i * xWidth + xWidth / 2, 0, 2, p.height - yHeght) //  bar on top of the array
+    const text: string = json?.letters ? json.letters[arr[i]] : `${arr[i]}`
     const fontSize = 1000 / (arr.length * text.length)
 
     p.textSize(fontSize)
-    p.fill(255)
+    p.textFont(font)
+    p.fill(json?.style.color || "white")
     p.text(text, i * xWidth + xWidth / 2, p.height - yHeght - 10)
   }
 }
@@ -47,7 +49,7 @@ export const createArrayForLetters = (letters: string[]): number[] => {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
-  return arr;
+  return arr
 }
 
 export const createRandArray = (n: number, upto = 100): number[] => {

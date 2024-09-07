@@ -1,6 +1,6 @@
 import p5 from "p5"
 import { BubbleSort } from "./algorithms/bubbleSort"
-import * as letters from "./public/asset/letters.json"
+import * as json from "./public/asset/letters.json"
 import { drawArray, createArrayForLetters } from "./utils/arrayUtil"
 import { SoundUtil } from "./utils/soundUtil"
 import { Sort } from "./utils/sortAlgorithmsFactory"
@@ -19,12 +19,60 @@ const sketch = (p: p5) => {
   const select = p.select("#select")
   const slider = p.select("#slider")
   const slider_label = p.select("#slider-label")
+  let intoDone = false
+  let into_font: any
+  let main_font: any
   if (!slider || !select || !slider_label) return
 
   const sortingAlgorithm = p.createSelect(select)
+  p.preload = () => {
+    // "./public/asset/fonts/jiret.ttf"
+    into_font = p.loadFont("/Algorithms-visualized/asset/fonts/yigezubisratgothic.ttf")
+    main_font = p.loadFont("/Algorithms-visualized/asset/fonts/jiret.ttf")
+  }
 
+  const intro = async () => {
+    return new Promise<void>((resolve) => {
+      const intro_Sort = Sort.SortWith(sortingAlgorithm.selected())
+      let intro_iterator = intro_Sort.sort(createArrayForLetters(json.nehemiah.letters))
+      let intro_nextIteration = intro_iterator.next()
+      const id = setInterval(() => {
+        p.background(0)
+        if (intro_nextIteration.done) { // if it finished drawing
+          drawArray({
+            p,
+            arr: lastValue,
+            swapIndex: -1,
+            swaped: false,
+            json: json.nehemiah,
+            sound,
+            font: into_font
+          })
+          clearInterval(id)
+          setTimeout(() => {
+            p.clear()
+            resolve()
+          }, 1000)
+          return
 
-  p.setup = () => {
+        }
+        drawArray({
+          p,
+          arr: intro_nextIteration.value.arr,
+          swapIndex: intro_nextIteration.value.index,
+          swaped: intro_nextIteration.value.swaped,
+          json: json.nehemiah,
+          sound,
+          font: into_font
+        })
+        lastValue = intro_nextIteration.value.arr
+        intro_nextIteration = intro_iterator.next()
+      }, 400)
+
+    })
+  }
+
+  p.setup = async () => {
     p.createCanvas(app.clientWidth, app.clientHeight)
 
 
@@ -40,10 +88,12 @@ const sketch = (p: p5) => {
     p.frameRate(+slider.value())
 
     // sound.homeTheme()
+    await intro()
+
 
     restart.mousePressed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
-      iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
+      iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
 
@@ -53,12 +103,12 @@ const sketch = (p: p5) => {
     })
 
     bubbleSort = Sort.SortWith(sortingAlgorithm.selected()) // retunrs sorting algorithm class
-    const letters_num = createArrayForLetters(letters.Amharic) // create array of numbers from the letters
+    const letters_num = createArrayForLetters(json.Amharic.letters) // create array of numbers from the letters
 
     iterator = bubbleSort.sort(letters_num) // sorts and returns iterator
     nextIteration = iterator.next()
 
-    drawArray({ p, arr: nextIteration.value.arr, swapIndex: nextIteration.value.index, swaped: false, letters: letters.Amharic, sound }) // draw num as a bar hieght
+    drawArray({ p, arr: nextIteration.value.arr, swapIndex: nextIteration.value.index, swaped: false, json: json.Amharic, sound, font: main_font }) // draw num as a bar hieght
 
     slider.changed(() => {
       p.frameRate(+slider.value()) // the plus symbol is to convert string to number
@@ -66,13 +116,16 @@ const sketch = (p: p5) => {
       if (slider.value() == 0)
         slider_label.html("Speed = 0, paused")
     })
+
+    intoDone = true
   }
   p.draw = () => {
+    if (!intoDone) return
     p.clear() // clear canvas
 
     sortingAlgorithm.changed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
-      iterator = bubbleSort.sort(createArrayForLetters(letters.Amharic)) // create array of numbers from the letters
+      iterator = bubbleSort.sort(createArrayForLetters(json.Amharic)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
     if (nextIteration.done) { // if it finished drawing
@@ -81,8 +134,9 @@ const sketch = (p: p5) => {
         arr: lastValue,
         swapIndex: -1,
         swaped: false,
-        letters: letters.Amharic,
-        sound
+        json: json.Amharic,
+        sound,
+        font: main_font,
       })
       return
     }
@@ -91,8 +145,9 @@ const sketch = (p: p5) => {
       arr: nextIteration.value.arr,
       swapIndex: nextIteration.value.index,
       swaped: nextIteration.value.swaped,
-      letters: letters.Amharic,
-      sound
+      json: json.Amharic,
+      sound,
+      font: main_font,
     })
     lastValue = nextIteration.value.arr
     nextIteration = iterator.next()
@@ -111,8 +166,9 @@ const sketch = (p: p5) => {
       arr: nextIteration.value.arr,
       swapIndex: nextIteration.value.index,
       swaped: nextIteration.value.swaped,
-      letters: letters.Amharic,
-      sound
+      json: json.Amharic,
+      sound,
+      font: main_font,
     })
     p.resizeCanvas(app.clientWidth, app.clientHeight)
     if (!prevMuteState) // if previouly has sound
