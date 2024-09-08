@@ -22,7 +22,7 @@ export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: para
   }
 
   for (let i = 0; i < arr.length; i++) {
-    const xWidth = (p.width / (arr.length + 1))
+    const xWidth = (p.width / (arr.length))
     const muliplier = 500 / Math.max(...arr)
     const yHeght = (arr[i] + 1) * muliplier
     if (i == swapIndex)

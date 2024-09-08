@@ -34,8 +34,11 @@ const sketch = (p: p5) => {
   const intro = async () => {
     return new Promise<void>((resolve) => {
       const intro_Sort = Sort.SortWith(sortingAlgorithm.selected())
-      let intro_iterator = intro_Sort.sort(createArrayForLetters(json.nehemiah.letters))
+      const num_array = json.nehemiah.letters.map((_, i) => i).reverse()
+
+      let intro_iterator = intro_Sort.sort(num_array)
       let intro_nextIteration = intro_iterator.next()
+
       const id = setInterval(() => {
         p.background(0)
         if (intro_nextIteration.done) { // if it finished drawing
@@ -87,20 +90,19 @@ const sketch = (p: p5) => {
     slider_label.html("Speed: " + slider.value())
     p.frameRate(+slider.value())
 
-    // sound.homeTheme()
-    await intro()
-
-
+    mute.mousePressed(() => {
+      isMutted = !isMutted
+      isMutted ? sound.mute() : sound.unmute()
+    })
     restart.mousePressed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
 
-    mute.mousePressed(() => {
-      isMutted = !isMutted
-      isMutted ? sound.mute() : sound.unmute()
-    })
+    await intro()
+    // sound.homeTheme()
+
 
     bubbleSort = Sort.SortWith(sortingAlgorithm.selected()) // retunrs sorting algorithm class
     const letters_num = createArrayForLetters(json.Amharic.letters) // create array of numbers from the letters
@@ -125,7 +127,7 @@ const sketch = (p: p5) => {
 
     sortingAlgorithm.changed(() => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
-      iterator = bubbleSort.sort(createArrayForLetters(json.Amharic)) // create array of numbers from the letters
+      iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
     if (nextIteration.done) { // if it finished drawing

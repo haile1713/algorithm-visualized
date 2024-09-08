@@ -3,12 +3,17 @@ export class InsertionSort {
   *sort(arr: number[]): Iterator<{ arr: number[], index: number, swaped: boolean }> {
     if (arr.length < 2)// already sorted case
       return { arr, index: -1, swaped: false }
-    let swaped = true
-    let counter = 0
-    let i = 1
     for (let i = 1; i < arr.length; i++) {
-      for (let j = 0; j < arr.length; j++) {
-
+      const key = arr[i]
+      const swaped = false
+      for (let j = i - 1; j >= 0; j--) { // check  in reverse
+        if (key < arr[j]) {
+          this.swap(arr, i, j)
+          yield { arr, index: i, swaped }
+        }
+        else {
+          yield { arr, index: i, swaped: false }
+        }
       }
     }
 
