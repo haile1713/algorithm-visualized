@@ -4,6 +4,7 @@ import * as json from "./public/asset/letters.json"
 import { drawArray, createArrayForLetters } from "./utils/arrayUtil"
 import { SoundUtil } from "./utils/soundUtil"
 import { Sort } from "./utils/sortAlgorithmsFactory"
+import { ITERATOR, ITERATOR_RESULT } from "./utils/types"
 
 const app = document.getElementById("app") as HTMLDivElement
 const sound = new SoundUtil()
@@ -11,18 +12,24 @@ const sound = new SoundUtil()
 
 const sketch = (p: p5) => {
   let bubbleSort: BubbleSort
-  let iterator: Iterator<{ arr: number[], index: number, swaped: boolean }>
-  let nextIteration: IteratorResult<{ arr: number[], index: number, swaped: boolean }>
+  let iterator: ITERATOR
+  let nextIteration: ITERATOR_RESULT
   let lastValue: number[]
   let isMutted = true
 
   const select = p.select("#select")
   const slider = p.select("#slider")
   const slider_label = p.select("#slider-label")
+  const numCompDiv = p.select('#num-comp')
+  const numSwapDiv = p.select('#num-swap')
   let intoDone = false
   let into_font: any
   let main_font: any
-  if (!slider || !select || !slider_label) return
+  let numSwap = 0;
+  if (
+    !slider || !select
+    || !slider_label
+    || !numCompDiv || !numSwapDiv) return
 
   const sortingAlgorithm = p.createSelect(select)
   p.preload = () => {
@@ -45,11 +52,11 @@ const sketch = (p: p5) => {
           drawArray({
             p,
             arr: lastValue,
-            swapIndex: -1,
+            swapIndex: { i: -1, j: -1 },
             swaped: false,
             json: json.nehemiah,
             sound,
-            font: into_font
+            font: main_font
           })
           clearInterval(id)
           setTimeout(() => {
@@ -66,7 +73,7 @@ const sketch = (p: p5) => {
           swaped: intro_nextIteration.value.swaped,
           json: json.nehemiah,
           sound,
-          font: into_font
+          font: main_font
         })
         lastValue = intro_nextIteration.value.arr
         intro_nextIteration = intro_iterator.next()
@@ -77,7 +84,6 @@ const sketch = (p: p5) => {
 
   p.setup = async () => {
     p.createCanvas(app.clientWidth, app.clientHeight)
-
 
     const restart = p.select("#restart")
     const mute = p.select("#mute")
@@ -99,6 +105,12 @@ const sketch = (p: p5) => {
       iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
     })
+    slider.changed(() => {
+      p.frameRate(+slider.value()) // the plus symbol is to convert string to number
+      slider_label.html("Speed: " + slider.value())
+      if (slider.value() == 0)
+        slider_label.html("Speed = 0, paused")
+    })
 
     await intro()
     // sound.homeTheme()
@@ -112,12 +124,6 @@ const sketch = (p: p5) => {
 
     drawArray({ p, arr: nextIteration.value.arr, swapIndex: nextIteration.value.index, swaped: false, json: json.Amharic, sound, font: main_font }) // draw num as a bar hieght
 
-    slider.changed(() => {
-      p.frameRate(+slider.value()) // the plus symbol is to convert string to number
-      slider_label.html("Speed: " + slider.value())
-      if (slider.value() == 0)
-        slider_label.html("Speed = 0, paused")
-    })
 
     intoDone = true
   }
@@ -129,12 +135,16 @@ const sketch = (p: p5) => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
+      // reset
+      numSwap = 0
+      numCompDiv.html("0")
+      numSwapDiv.html("0")
     })
     if (nextIteration.done) { // if it finished drawing
       drawArray({
         p,
         arr: lastValue,
-        swapIndex: -1,
+        swapIndex: { i: -1, j: -1 },
         swaped: false,
         json: json.Amharic,
         sound,
@@ -151,6 +161,10 @@ const sketch = (p: p5) => {
       sound,
       font: main_font,
     })
+    numCompDiv.html(`${nextIteration.value.numComp}`)
+    if (nextIteration.value.swaped)
+      numSwap++
+    numSwapDiv.html(`${numSwap}`)
     lastValue = nextIteration.value.arr
     nextIteration = iterator.next()
   }

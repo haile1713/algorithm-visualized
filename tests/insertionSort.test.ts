@@ -1,7 +1,8 @@
 import { describe, it, expect, test } from "vitest";
-import { BubbleSort } from "../algorithms/bubbleSort";
+import { InsertionSort } from "../algorithms/insertionSort";
+import { ITERATOR } from "../utils/types"
 
-const iteratorToArr = (iterator: Iterator<{ arr: number[], index: { i: number, j: number } }>) => {
+const iteratorToArr = (iterator: ITERATOR) => {
   let result = iterator.next()
   let finalArr: number[] = result.value.arr
   while (!result.done) {
@@ -13,26 +14,26 @@ const iteratorToArr = (iterator: Iterator<{ arr: number[], index: { i: number, j
 describe("BubbleSort", () => {
 
   it("sort empty array", () => {
-    const testBubbleSort = new BubbleSort()
-    const sortedArr = iteratorToArr(testBubbleSort.sort([]))
+    const testInsertionSort = new InsertionSort()
+    const sortedArr = iteratorToArr(testInsertionSort.sort([]))
     expect(sortedArr).toStrictEqual([])
   })
 
   it("if one item passed", () => {
-    const testBubbleSort = new BubbleSort()
+    const testInsertionSort = new InsertionSort()
     const itemToTest = 1
-    const sortedArr = iteratorToArr(testBubbleSort.sort([itemToTest]))
+    const sortedArr = iteratorToArr(testInsertionSort.sort([itemToTest]))
     expect(sortedArr).toStrictEqual([itemToTest])
   })
   it("sort array", () => {
-    const testBubbleSort = new BubbleSort()
-    const sortedArr = iteratorToArr(testBubbleSort.sort([3, 2, 1]))
+    const testInsertionSort = new InsertionSort()
+    const sortedArr = iteratorToArr(testInsertionSort.sort([3, 2, 1]))
     expect(sortedArr).toStrictEqual([1, 2, 3])
   })
 
   it("sort array 2", () => {
-    const testBubbleSort = new BubbleSort()
-    const sortedArr = iteratorToArr(testBubbleSort.sort([3, 5, 6, 2, 1]))
+    const testInsertionSort = new InsertionSort()
+    const sortedArr = iteratorToArr(testInsertionSort.sort([3, 5, 6, 2, 1]))
     expect(sortedArr).toStrictEqual([1, 2, 3, 5, 6])
   })
 

@@ -4,7 +4,7 @@ import { SoundUtil } from "./soundUtil"
 type param = {
   p: p5
   arr: number[]
-  swapIndex: number
+  swapIndex: { i: number, j: number }
   swaped: boolean
   json: { style: { color: string, bg_color: string }, letters: string[] } | null
   sound: SoundUtil
@@ -13,11 +13,11 @@ type param = {
 const Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: param) => {
-  if (!swaped && swapIndex != -1) {
+  if (!swaped && swapIndex.i != -1 && swapIndex.j != -1) {
     sound.playNote("C5")
   }
-  else if (swaped && swapIndex != -1) {
-    const note = `${Notes[swapIndex % Notes.length]}4`
+  else if (swaped && swapIndex.i != -1 && swapIndex.j != -1) {
+    const note = `${Notes[swapIndex.i % Notes.length]}4`
     sound.playNote(note)
   }
 
@@ -25,9 +25,9 @@ export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: para
     const xWidth = (p.width / (arr.length))
     const muliplier = 500 / Math.max(...arr)
     const yHeght = (arr[i] + 1) * muliplier
-    if (i == swapIndex)
+    if (i == swapIndex.i)
       p.fill("red")
-    if (i == swapIndex + 1)
+    if (i == swapIndex.j)
       p.fill("blue")
     p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght) // bar representing the array
     p.fill(json?.style.bg_color || "#444")
