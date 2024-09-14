@@ -47,7 +47,7 @@ const sketch = (p: p5) => {
       let intro_nextIteration = intro_iterator.next()
 
       const id = setInterval(() => {
-        p.background(0)
+        p.background(25)
         if (intro_nextIteration.done) { // if it finished drawing
           drawArray({
             p,
