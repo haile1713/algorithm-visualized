@@ -104,6 +104,7 @@ const sketch = (p: p5) => {
       bubbleSort = Sort.SortWith(sortingAlgorithm.selected())
       iterator = bubbleSort.sort(createArrayForLetters(json.Amharic.letters)) // create array of numbers from the letters
       nextIteration = iterator.next()
+      numSwap = 0
     })
     slider.changed(() => {
       p.frameRate(+slider.value()) // the plus symbol is to convert string to number
