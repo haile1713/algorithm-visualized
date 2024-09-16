@@ -16,12 +16,6 @@ export class BubbleSort {
           this.swap(arr, j + 1, j)
           swaped = true
         }
-        else {
-          yield {
-            arr, index: { i: j, j: j + 1 }, swaped: false, numComp
-          }
-          continue
-        }
         yield {
           arr, index: { i: j, j: j + 1 }, swaped, numComp
         }
