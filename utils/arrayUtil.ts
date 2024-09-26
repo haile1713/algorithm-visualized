@@ -10,15 +10,14 @@ type param = {
   sound: SoundUtil
   font: p5.Font
 }
-const Notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 
 export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: param) => {
-  if (!swaped && swapIndex.i != -1 && swapIndex.j != -1) {
-    sound.playNote("C5")
-  }
-  else if (swaped && swapIndex.i != -1 && swapIndex.j != -1) {
-    const note = `${Notes[swapIndex.i % Notes.length]}4`
-    sound.playNote(note)
+  // if (!swaped && swapIndex.i != -1 && swapIndex.j != -1) {
+  //   // sound.playNote("C5")
+  // }
+  if (swapIndex.i != -1 && swapIndex.j != -1) {
+    // sound.playNote()
+    // sound.playShepardTone(swapIndex.i, p)
   }
 
   for (let i = 0; i < arr.length; i++) {

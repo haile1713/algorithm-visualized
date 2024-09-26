@@ -44,10 +44,10 @@
 
   </div>
 
-  <div class="left mr-5 flex flex-row gap-10 mt-3">
-    <div class="stats shadow p-0 m-5  invisible  lg:visible">
+  <div class=" z-[5] absolute top-0 right-0 mr-5 flex flex-row gap-10 mt-3 ">
+    <div class="stats shadow p-0 m-5  invisible  lg:visible bg-accent z-[-40]">
       <div class="stat">
-        <div class="stat-figure text-accent">
+        <div class="stat-figure text-black">
           <svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-8 w-8 fill-current"
             viewBox="0 0 512 512"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
             <path
@@ -61,7 +61,7 @@
       </div>
 
       <div class="stat">
-        <div class="stat-figure text-accent">
+        <div class="stat-figure text-black">
           <svg xmlns="http://www.w3.org/2000/svg" class="inline-block h-8 w-8 stroke-current fill-current"
             viewBox="0 0 512 512">
             <path
@@ -77,8 +77,8 @@
     <div>
       <div class="slider">
         <label for="slider" class="text-cyan-500" id="slider-label">Speed</label>
-        <input id="slider" type="range" min="0" max="10" value="4" class="range" step="1" />
-        <div class="flex w-full justify-between px-2 text-xs">
+        <input id="slider" type="range" min="0" max="10" value="4" class="range fill-red-300" step="1" />
+        <div class="flex w-full justify-between px-2 text-xs text-accent">
           <span>|</span>
           <span>|</span>
           <span>|</span>

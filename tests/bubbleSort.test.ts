@@ -10,7 +10,7 @@ const iteratorToArr = (iterator: Iterator<{ arr: number[], index: { i: number, j
   }
   return finalArr
 }
-describe("BubbleSort", () => {
+describe("Bubble Sort", () => {
 
   it("sort empty array", () => {
     const testBubbleSort = new BubbleSort()
