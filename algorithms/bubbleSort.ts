@@ -15,9 +15,15 @@ export class BubbleSort {
         if (arr[j] > arr[j + 1]) {
           this.swap(arr, j + 1, j)
           swaped = true
+          yield {
+            arr, index: { i: j, j: j + 1 }, swaped: true, numComp
+          }
         }
-        yield {
-          arr, index: { i: j, j: j + 1 }, swaped, numComp
+        else {
+          yield {
+            arr, index: { i: j, j: j + 1 }, swaped: false, numComp
+          }
+
         }
       }
       i += 1

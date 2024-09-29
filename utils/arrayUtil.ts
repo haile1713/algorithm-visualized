@@ -12,12 +12,8 @@ type param = {
 }
 
 export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: param) => {
-  // if (!swaped && swapIndex.i != -1 && swapIndex.j != -1) {
-  //   // sound.playNote("C5")
-  // }
   if (swapIndex.i != -1 && swapIndex.j != -1) {
-    // sound.playNote()
-    // sound.playShepardTone(swapIndex.i, p)
+    sound.playNotes(swaped)
   }
 
   for (let i = 0; i < arr.length; i++) {

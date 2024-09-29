@@ -7,7 +7,6 @@ import { Sort } from "./utils/sortAlgorithmsFactory"
 import { ITERATOR, ITERATOR_RESULT } from "./utils/types"
 
 const app = document.getElementById("app") as HTMLDivElement
-const sound = new SoundUtil()
 
 
 const sketch = (p: p5) => {
@@ -19,6 +18,7 @@ const sketch = (p: p5) => {
 
   const select = p.select("#select")
   const slider = p.select("#slider")
+  const scale = p.select("#scale") //musical
   const slider_label = p.select("#slider-label")
   const numCompDiv = p.select('#num-comp')
   const numSwapDiv = p.select('#num-swap')
@@ -30,13 +30,18 @@ const sketch = (p: p5) => {
   if (
     !slider || !select
     || !slider_label
-    || !numCompDiv || !numSwapDiv) return
+    || !numCompDiv || !numSwapDiv
+    || !scale
+  ) return
 
   const sortingAlgorithm = p.createSelect(select)
+  const musicalScale = p.createSelect(scale)
+  const sound = new SoundUtil(scale.value().toString())
   p.preload = () => {
-    // "./public/asset/fonts/jiret.ttf"
+    // "./public/asset/fonts/AbyssinicaSIL-R.ttf"
     into_font = p.loadFont("/Algorithms-visualized/asset/fonts/yigezubisratgothic.ttf")
-    main_font = p.loadFont("/Algorithms-visualized/asset/fonts/jiret.ttf")
+    main_font = p.loadFont("/Algorithms-visualized/asset/fonts/AbyssinicaSIL-R.ttf")
+    // main_font = p.loadFont("/Algorithms-visualized/asset/fonts/jiret.ttf")
   }
 
   const intro = async () => {
@@ -116,12 +121,9 @@ const sketch = (p: p5) => {
     })
 
     await intro()
-    // sound.homeTheme()
-
 
     sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected()) // retunrs sorting algorithm class
     const letters_num = createArrayForLetters(letters.letters) // create array of numbers from the letters
-    console.log(letters_num)
 
     iterator = sortAlgorithms.sort(letters_num) // sorts and returns iterator
     nextIteration = iterator.next()
@@ -134,6 +136,11 @@ const sketch = (p: p5) => {
   p.draw = () => {
     if (!intoDone) return
     p.clear() // clear canvas
+
+    musicalScale.changed(() => {
+      sound.setScale(musicalScale.selected())
+      console.log(musicalScale.selected())
+    })
 
     sortingAlgorithm.changed(() => {
       sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected())
