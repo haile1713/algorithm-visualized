@@ -57,12 +57,25 @@ export class SoundUtil {
     if (this.isMutted) return
     const noteIndex = this.counter % this.scale.length
     const note = this.scale[noteIndex]
-    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSaw(`${note}4`)
+    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSine(`${note}6`)
   }
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
     // osc.volume.value = -10
+
+    osc.connect(envelope).start();
+
+    envelope.triggerAttackRelease("0.3");
+
+    osc.stop("+0.4");
+    osc.onstop = () => osc.dispose();
+    this.counter++
+  }
+  playNoteSine(note: string) {
+    const envelope = this.envelops[(this.counter % this.envelops.length)];
+    const osc = new TONE.Oscillator({ type: "sine", frequency: note })
+    // osc.volume.value = 10
 
     osc.connect(envelope).start();
 
