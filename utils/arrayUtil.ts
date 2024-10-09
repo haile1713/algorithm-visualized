@@ -4,7 +4,7 @@ import { SoundUtil } from "./soundUtil"
 type param = {
   p: p5
   arr: number[]
-  swapIndex: { i: number, j: number }
+  swapIndex: { i: number, j: number, k?: number }
   swaped: boolean
   json: { style: { color: string, bg_color: string }, letters: string[] } | null
   sound: SoundUtil
@@ -24,6 +24,8 @@ export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: para
       p.fill("red")
     if (i == swapIndex.j)
       p.fill("blue")
+    if (i == swapIndex.k)
+      p.fill("green")
     p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght) // bar representing the array
     p.fill(json?.style.bg_color || "#444")
     p.rect(i * xWidth + xWidth / 2, 0, 2, p.height - yHeght) //  bar on top of the array

@@ -26,6 +26,7 @@ export class SoundUtil {
     this.setScale(scale)
   }
   setScale(scale: string) {
+    this.counter = 0
     switch (scale) {
       case "አንቺሆዬ":
         this.scale = this.Anchihoye
@@ -57,12 +58,12 @@ export class SoundUtil {
     if (this.isMutted) return
     const noteIndex = this.counter % this.scale.length
     const note = this.scale[noteIndex]
-    swaped ? this.playNoteTri(`${note}4`) : this.playNoteSine(`${note}6`)
+    swaped ? this.playNoteSine(`${note}4`, -5) : this.playNoteSine(`${note}5`, -10)
   }
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
-    osc.volume.value = -10
+    osc.volume.value = -15
 
     osc.connect(envelope).start();
 
@@ -72,10 +73,23 @@ export class SoundUtil {
     osc.onstop = () => osc.dispose();
     this.counter++
   }
-  playNoteSine(note: string) {
+  playNoteSquare(note: string) {
+    const envelope = this.envelops[(this.counter % this.envelops.length)];
+    const osc = new TONE.Oscillator({ type: "square", frequency: note })
+    // osc.volume.value = -10
+
+    osc.connect(envelope).start();
+
+    envelope.triggerAttackRelease("0.3");
+
+    osc.stop("+0.4");
+    osc.onstop = () => osc.dispose();
+    this.counter++
+  }
+  playNoteSine(note: string, volume: number) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "sine", frequency: note })
-    osc.volume.value = -18
+    osc.volume.value = volume
 
     osc.connect(envelope).start();
 

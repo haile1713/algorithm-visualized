@@ -13,13 +13,16 @@ export class SelectionSort {
         if (arr[j] <= min) {
           min = arr[j] // undate the min
           minIndex = j
+          yield { arr, index: { i: j, j: minIndex, k: i }, swaped: true, numComp: counter }
         }
-        yield { arr, index: { i: j, j: minIndex }, swaped: false, numComp: counter }
+        else {
+          yield { arr, index: { i: j, j: minIndex, k: i }, swaped: false, numComp: counter }
+        }
       }
       this.swap(arr, i, minIndex)
-      yield { arr, index: { i, j: minIndex }, swaped: true, numComp: counter }
+      yield { arr, index: { i, j: minIndex, k: -1 }, swaped: true, numComp: counter }
     }
-    yield { arr, index: { i: -1, j: -1 }, swaped: false, numComp: counter }
+    yield { arr, index: { i: -1, j: -1, k: -1 }, swaped: false, numComp: counter }
   }
 
   swap(arr: number[], i: number, j: number) {
