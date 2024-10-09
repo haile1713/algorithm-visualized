@@ -62,7 +62,7 @@ export class SoundUtil {
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "triangle", frequency: note })
-    // osc.volume.value = -10
+    osc.volume.value = -10
 
     osc.connect(envelope).start();
 
@@ -75,7 +75,7 @@ export class SoundUtil {
   playNoteSine(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
     const osc = new TONE.Oscillator({ type: "sine", frequency: note })
-    // osc.volume.value = 10
+    osc.volume.value = -18
 
     osc.connect(envelope).start();
 
@@ -104,8 +104,7 @@ export class SoundUtil {
     if (!this.isMutted) {
       TONE.loaded().then(() => {
         this.music.start()
-        const filter = new TONE.Filter(300, "lowpass").toDestination();
-        this.music.connect(filter)
+        // const filter = new TONE.Filter(300, "lowpass").toDestination();
         this.music.volume.value = -20
         this.music.loop = true
       })

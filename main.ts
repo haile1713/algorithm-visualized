@@ -48,6 +48,34 @@ const sketch = (p: p5) => {
     return new Promise<void>((resolve) => {
       const intro_Sort = Sort.SortWith(sortingAlgorithm.selected())
       const num_array = json.nehemiah.letters.map((_, i) => i).reverse()
+      const restart = p.select("#restart")
+      const mute = p.select("#mute")
+      const muteCheckbox = p.select("#muteCheckbox")
+      if (!restart || !mute || !muteCheckbox) return // if any ui has not been found return
+
+      // defalut values
+      muteCheckbox.checked(false)
+      slider.value(3)
+      slider_label.html("Speed: " + slider.value())
+      p.frameRate(+slider.value())
+
+      mute.mousePressed(() => {
+        isMutted = !isMutted
+        isMutted ? sound.mute() : sound.unmute()
+      })
+      restart.mousePressed(() => {
+        sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected())
+        iterator = sortAlgorithms.sort(createArrayForLetters(letters.letters)) // create array of numbers from the letters
+        nextIteration = iterator.next()
+        numSwap = 0
+      })
+      slider.changed(() => {
+        p.frameRate(+slider.value()) // the plus symbol is to convert string to number
+        slider_label.html("Speed: " + slider.value())
+        if (slider.value() == 0)
+          slider_label.html("Speed = 0, paused")
+      })
+
 
       let intro_iterator = intro_Sort.sort(num_array)
       let intro_nextIteration = intro_iterator.next()
@@ -68,7 +96,7 @@ const sketch = (p: p5) => {
           setTimeout(() => {
             p.clear()
             resolve()
-          }, 1000)
+          }, 0)
           return
 
         }
@@ -92,37 +120,9 @@ const sketch = (p: p5) => {
     const cvs = p.createCanvas(app.clientWidth, app.clientHeight)
     cvs.style("z-index", "1000")
 
-    const restart = p.select("#restart")
-    const mute = p.select("#mute")
-    const muteCheckbox = p.select("#muteCheckbox")
-    if (!restart || !mute || !muteCheckbox) return // if any ui has not been found return
-
-    // defalut values
-    muteCheckbox.checked(false)
-    slider.value(3)
-    slider_label.html("Speed: " + slider.value())
-    p.frameRate(+slider.value())
-
-    mute.mousePressed(() => {
-      isMutted = !isMutted
-      isMutted ? sound.mute() : sound.unmute()
-    })
-    restart.mousePressed(() => {
-      sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected())
-      iterator = sortAlgorithms.sort(createArrayForLetters(letters.letters)) // create array of numbers from the letters
-      nextIteration = iterator.next()
-      numSwap = 0
-    })
-    slider.changed(() => {
-      p.frameRate(+slider.value()) // the plus symbol is to convert string to number
-      slider_label.html("Speed: " + slider.value())
-      if (slider.value() == 0)
-        slider_label.html("Speed = 0, paused")
-    })
-
     await intro()
 
-    sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected()) // retunrs sorting algorithm class
+    sortAlgorithms = Sort.SortWith(sortingAlgorithm.selected()) // returns sorting algorithm class
     const letters_num = createArrayForLetters(letters.letters) // create array of numbers from the letters
 
     iterator = sortAlgorithms.sort(letters_num) // sorts and returns iterator
@@ -138,8 +138,9 @@ const sketch = (p: p5) => {
     p.clear() // clear canvas
 
     musicalScale.changed(() => {
-      sound.setScale(musicalScale.selected())
-      console.log(musicalScale.selected())
+      const selected = musicalScale.selected()
+      sound.setScale(selected)
+      console.log(selected)
     })
 
     sortingAlgorithm.changed(() => {
@@ -163,7 +164,7 @@ const sketch = (p: p5) => {
       })
       return
     }
-    drawArray({
+    drawArray({ // if finished drawing show the last value it got(sorted)
       p,
       arr: nextIteration.value.arr,
       swapIndex: nextIteration.value.index,
@@ -172,6 +173,7 @@ const sketch = (p: p5) => {
       sound,
       font: main_font,
     })
+    // show stat
     numCompDiv.html(`${nextIteration.value.numComp}`)
     if (nextIteration.value.swaped)
       numSwap++
