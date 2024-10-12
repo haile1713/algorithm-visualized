@@ -58,7 +58,7 @@ export class SoundUtil {
     if (this.isMutted) return
     const noteIndex = this.counter % this.scale.length
     const note = this.scale[noteIndex]
-    swaped ? this.playNoteSine(`${note}4`, -5) : this.playNoteSine(`${note}5`, -10)
+    swaped ? this.playNoteSine(`${note}4`, 0) : this.playNoteSine(`${note}5`, -8)
   }
   playNoteTri(note: string) {
     const envelope = this.envelops[(this.counter % this.envelops.length)];
