@@ -48,7 +48,8 @@
     ],
     "style": {
       "color": "white",
-      "bg_color": "black"
+      "bg_color": "black",
+      "size_multiplier":4
     }
   },
   "AmharicNums": {

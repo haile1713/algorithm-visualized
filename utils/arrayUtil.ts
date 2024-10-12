@@ -6,7 +6,7 @@ type param = {
   arr: number[]
   swapIndex: { i: number, j: number, k?: number }
   swaped: boolean
-  json: { style: { color: string, bg_color: string }, letters: string[] } | null
+  json: { style: { color: string, bg_color: string, size_multiplier: number }, letters: string[] } | null
   sound: SoundUtil
   font: p5.Font
 }
@@ -17,25 +17,30 @@ export const drawArray = ({ p, arr, swapIndex, swaped, json, sound, font }: para
   }
 
   for (let i = 0; i < arr.length; i++) {
-    const xWidth = (p.width / (arr.length))
-    const muliplier = 500 / Math.max(...arr)
-    const yHeght = (arr[i] + 1) * muliplier
+    const xWidth = 0.9 * (p.width / (arr.length))
+    const arrWidth = xWidth * arr.length
+    const remaingSpace = p.width - arrWidth
+    const maxHeight = (1 / 2) * p.height
+    const xPos = i * xWidth + xWidth / 2 + remaingSpace / 2
+    const yHeight = p.map(arr[i], 0, Math.max(...arr), 10, maxHeight)
     if (i == swapIndex.i)
       p.fill("red")
     if (i == swapIndex.j)
       p.fill("blue")
     if (i == swapIndex.k)
       p.fill("green")
-    p.rect(i * xWidth + xWidth / 2, p.height, 10, -yHeght) // bar representing the array
-    p.fill(json?.style.bg_color || "#444")
-    p.rect(i * xWidth + xWidth / 2, 0, 2, p.height - yHeght) //  bar on top of the array
+    const barSize = p.map(p.width, 50, 2000, 2, 10)
+    p.rect(xPos, p.height, barSize, -yHeight) // bar representing the array
+    p.fill("#111")
+    p.rect(xPos, 0, barSize, p.height - yHeight) //  bar on top of the array
     const text: string = json?.letters ? json.letters[arr[i]] : `${arr[i]}`
-    const fontSize = 1000 / (arr.length * text.length)
+    let fontSize = p.map(p.width, 0, 2000, 10, 40)
+    if (json?.style.size_multiplier) fontSize *= json.style.size_multiplier
 
     p.textSize(fontSize)
     p.textFont(font)
     p.fill(json?.style.color || "white")
-    p.text(text, i * xWidth + xWidth / 2, p.height - yHeght - 10)
+    p.text(text, xPos, p.height - yHeight - 10)
   }
 }
 
