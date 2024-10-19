@@ -39,9 +39,9 @@ const sketch = (p: p5) => {
   const sound = new SoundUtil(scale.value().toString())
   p.preload = () => {
     // "./public/asset/fonts/AbyssinicaSIL-R.ttf"
-    into_font = p.loadFont("/Algorithms-visualized/asset/fonts/yigezubisratgothic.ttf")
-    main_font = p.loadFont("/Algorithms-visualized/asset/fonts/AbyssinicaSIL-R.ttf")
-    // main_font = p.loadFont("/Algorithms-visualized/asset/fonts/jiret.ttf")
+    into_font = p.loadFont("/asset/fonts/yigezubisratgothic.ttf")
+    main_font = p.loadFont("/asset/fonts/AbyssinicaSIL-R.ttf")
+    // main_font = p.loadFont("/asset/fonts/jiret.ttf")
   }
 
   const intro = async () => {

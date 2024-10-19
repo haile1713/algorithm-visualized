@@ -13,7 +13,7 @@ export class SoundUtil {
 
   counter = 0
   constructor(scale: string) {
-    this.music = new TONE.Player("/Algorithms-visualized/asset/Tsehay_demekech.mp3").toDestination()
+    this.music = new TONE.Player("/asset/Tsehay_demekech.mp3").toDestination()
     this.envelops = Array.from({ length: 10 }, () => {
       const env = new TONE.AmplitudeEnvelope({
         attack: 0.05,
