@@ -27,6 +27,10 @@ This project is an interactive web application that visualizes various sorting a
 ![image](https://github.com/user-attachments/assets/6d6e2904-6a9a-4b85-85f0-f8722df5aa18)
 ![image](https://github.com/user-attachments/assets/d0da1d76-eab8-4efd-8494-0075685b5ecf)
 
+## Live Demo 
+
+https://algorithm-visualized.vercel.app/
+
 
 ## Setup and Installation
 
