@@ -4,53 +4,52 @@
 
 html,
 body {
-  margin: 0;
-  height: 100%;
-  overflow: hidden;
-  /* background: #332200; */
-  /* background: #000; */
-  background-image: url("/asset/bg.jpg");
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+	/* background: #332200; */
+	/* background: #000; */
+	background-image: url("/asset/bg.jpg");
 }
 
 #app {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 #btn-container {
-  display: flex;
-  gap: 10px;
-  z-index: 10000;
-  position: absolute;
-  top: 0;
+	display: flex;
+	gap: 10px;
+	z-index: 10000;
+	position: absolute;
+	top: 0;
 }
 
 .left {
-  z-index: 10000;
-  position: absolute;
-  top: 0;
-  right: 0;
-
+	z-index: 10000;
+	position: absolute;
+	top: 0;
+	right: 0;
 }
 
 .choose {
-  z-index: 10000;
-  /* position: absolute; */
-  /* top: 0; */
-  /* right: 0; */
+	z-index: 10000;
+	/* position: absolute; */
+	/* top: 0; */
+	/* right: 0; */
 }
 
 .slider {
-  z-index: 10000;
-  /* position: absolute; */
-  /* top: 0; */
-  /* right: 0; */
+	z-index: 10000;
+	/* position: absolute; */
+	/* top: 0; */
+	/* right: 0; */
 }
 
 .btns {
-  @apply btn btn-accent active:btn-error;
+	@apply btn btn-accent active:btn-error;
 }
 
 .btns-click {
-  @apply btn btn-accent btn-error active:bg-blue-100;
+	@apply btn btn-accent btn-error active:bg-blue-100;
 }
