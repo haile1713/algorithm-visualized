@@ -8,7 +8,8 @@ body {
   height: 100%;
   overflow: hidden;
   /* background: #332200; */
-  background: #000;
+  /* background: #000; */
+  background-image: url("/asset/bg.jpg");
 }
 
 #app {
