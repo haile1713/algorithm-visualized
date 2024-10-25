@@ -10,6 +10,7 @@ body {
 	/* background: #332200; */
 	/* background: #000; */
 	background-image: url("/asset/bg.jpg");
+	background-size: cover;
 }
 
 #app {
